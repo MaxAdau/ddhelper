@@ -26,7 +26,15 @@ class Character(BaseModel, db.Model):
     klass_id = Column(Integer, ForeignKey("classes.id"))
     klass = db.relationship("Class")
 
+    # TODO In order to handle the class / levels mechanics,
+    #
+    # I need a junction table like character_class:
+    #   - character_id
+    #   - class_id
+    #   - level
+    #   - order
     # Hit points
+
     current_hp = Column(Integer)
     total_hp = Column(Integer)
 

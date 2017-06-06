@@ -107,3 +107,34 @@ class Armor(BaseModel, db.Model):
 
     def __repr__(self):
         return self.name
+
+
+class Events(BaseModel, db.Model):
+    """Model for the armor table"""
+    __tablename__ = 'events'
+
+    # incremental ID
+    id = Column(Integer, primary_key=True)
+
+    # Is this armor a shield ?
+    name = Column(String)
+
+    # About the armor
+    name = Column(String)
+    description = Column(String)
+
+    # Damage
+    ca_bonus = Column(Integer)
+    max_dex = Column(Integer)
+    armor_penalty_check = Column(Integer)
+    arcane_spell_fail = Column(Integer)
+    speed_6m = Column(Integer)
+    speed_9m = Column(Integer)
+
+    # Other
+    weight = Column(Float)  # in Kilo
+    dmg_type = Column(String)
+    cost = Column(String)  # in GP
+
+    def __repr__(self):
+        return self.name
