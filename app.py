@@ -10,7 +10,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 import os
 
-from models.models import db, Race, Class, Weapon, Armor
+from models.models import db, Race, Class, Weapon, Armor, Event, Adventure, Encounter
 from models.character import Character
 
 # Create Flask app
@@ -26,6 +26,9 @@ admin.add_view(ModelView(Race, db.session))
 admin.add_view(ModelView(Class, db.session))
 admin.add_view(ModelView(Weapon, db.session))
 admin.add_view(ModelView(Armor, db.session))
+admin.add_view(ModelView(Event, db.session))
+admin.add_view(ModelView(Encounter, db.session))
+admin.add_view(ModelView(Adventure, db.session))
 
 # Define postgresql config
 if 'DDH_DATABASE_PASSWD' not in os.environ:

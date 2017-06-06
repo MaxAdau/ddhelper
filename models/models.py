@@ -109,32 +109,65 @@ class Armor(BaseModel, db.Model):
         return self.name
 
 
-class Events(BaseModel, db.Model):
+class Event(BaseModel, db.Model):
     """Model for the armor table"""
     __tablename__ = 'events'
 
     # incremental ID
     id = Column(Integer, primary_key=True)
 
-    # Is this armor a shield ?
+    # About the event
     name = Column(String)
+    adventure_id = Column(Integer, ForeignKey("adventures.id"))
+    adventure = db.relationship("Adventure")
 
-    # About the armor
+    # what did happen here ?
+    description = Column(String)
+
+    def __repr__(self):
+        return self.name
+
+
+class Encounter(BaseModel, db.Model):
+    """Model for the armor table"""
+    __tablename__ = 'encounters'
+
+    # incremental ID
+    id = Column(Integer, primary_key=True)
+
+    adventure_id = Column(Integer, ForeignKey("adventures.id"))
+    adventure = db.relationship("Adventure")
+
+    # About the event
     name = Column(String)
     description = Column(String)
 
-    # Damage
-    ca_bonus = Column(Integer)
-    max_dex = Column(Integer)
-    armor_penalty_check = Column(Integer)
-    arcane_spell_fail = Column(Integer)
-    speed_6m = Column(Integer)
-    speed_9m = Column(Integer)
+    # Who did fight ?
+    players = Column(String)  # TODO this should be a list of character IDs where character.type == PC
+    allies = Column(String)  # TODO this should be a list of character IDs
+    opponents = Column(String)  # TODO this should be a list of character IDs
 
-    # Other
-    weight = Column(Float)  # in Kilo
-    dmg_type = Column(String)
-    cost = Column(String)  # in GP
+    def __repr__(self):
+        return self.name
+
+
+class Adventure(BaseModel, db.Model):
+    """Model for the adventure table"""
+    __tablename__ = 'adventures'
+
+    # incremental ID
+    id = Column(Integer, primary_key=True)
+
+    name = Column(String)
+    description = Column(String)
+
+    # History of this adventure
+    events = Column(String)  # TODO this should be a list of events.id
+    encounters = Column(String)  # TODO this should be a list of encounter.id
+    #race_id = Column(Integer, ForeignKey("races.id"))
+    #race = db.relationship("Race")
+
+    players = Column(String)  # TODO this should be a list of players.id
 
     def __repr__(self):
         return self.name
