@@ -2,6 +2,9 @@
 # All of this code came from here
 # https://www.theodo.fr/blog/2017/03/developping-a-flask-web-app-with-a-postresql-database-making-all-the-possible-errors/
 
+import argparse
+import os
+
 from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -17,6 +20,7 @@ app.secret_key = "super secret key"
 # Admin flask
 admin = Admin(app, name='Dungeons and Dragons', template_mode='bootstrap3')
 
+# Add views of flask admin UI
 admin.add_view(ModelView(Character, db.session))
 admin.add_view(ModelView(Race, db.session))
 admin.add_view(ModelView(Class, db.session))
@@ -24,9 +28,13 @@ admin.add_view(ModelView(Weapon, db.session))
 admin.add_view(ModelView(Armor, db.session))
 
 # Define postgresql config
+if 'DDH_DATABASE_PASSWD' not in os.environ:
+    exit('Unable to find DDH_DATABASE_PASSWD env variable : exiting')
+
+
 POSTGRES = {
     'user': 'nndtlkswctupow',
-    'pw': 'bec21207f8b49387beba69e8aba59256acfec3c174c8b9e5579528ba6fcd2cda',
+    'pw': os.environ['DDH_DATABASE_PASSWD'],
     'db': 'dalp11jeof21vd',
     'host': 'ec2-54-75-231-195.eu-west-1.compute.amazonaws.com',
     'port': '5432'
