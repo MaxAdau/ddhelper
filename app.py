@@ -7,7 +7,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 import os
 
-from models.models import db, Race, Class, Weapon
+from models.models import db, Race, Class, Weapon, Armor
 from models.character import Character
 
 # Create Flask app
@@ -21,13 +21,14 @@ admin.add_view(ModelView(Character, db.session))
 admin.add_view(ModelView(Race, db.session))
 admin.add_view(ModelView(Class, db.session))
 admin.add_view(ModelView(Weapon, db.session))
+admin.add_view(ModelView(Armor, db.session))
 
 # Define postgresql config
 POSTGRES = {
-    'user': 'lklldgwlxcjjlc',
-    'pw': '601058637def6997cf9b0ce63ee3ed4c1139e2a0e0cc4e79fbb4591fea6e56cd',
-    'db': 'd9oda19f6e3vt6',
-    'host': 'ec2-54-246-108-119.eu-west-1.compute.amazonaws.com',
+    'user': 'nndtlkswctupow',
+    'pw': 'bec21207f8b49387beba69e8aba59256acfec3c174c8b9e5579528ba6fcd2cda',
+    'db': 'dalp11jeof21vd',
+    'host': 'ec2-54-75-231-195.eu-west-1.compute.amazonaws.com',
     'port': '5432'
 }
 
