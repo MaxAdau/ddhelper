@@ -79,8 +79,10 @@ class Character(BaseModel, db.Model):
     left_hand_id = Column(Integer, ForeignKey("weapons.id"))
     left_hand = db.relationship("Weapon", foreign_keys=[left_hand_id])
 
-    shield_id = Column(Integer, ForeignKey("armors.id"))  # todo handle the is_shield field
-    shield = db.relationship("Armor", foreign_keys=[shield_id])
+    # http://docs.sqlalchemy.org/en/latest/orm/join_conditions.html#specifying-alternate-join-conditions
+    shield_id = Column(Integer, ForeignKey("armors.id"))
+    shield = db.relationship("Armor",
+                             primaryjoin="and_ (Character.shield_id==Armor.id, " "Armor.is_shield=='true')")
 
     # Armor
     armor_id = Column(Integer, ForeignKey("armors.id"))
