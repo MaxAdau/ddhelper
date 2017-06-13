@@ -5,6 +5,7 @@
 #!/usr/bin/env python
 
 # This code came from here ; http://docs.graphene-python.org/projects/sqlalchemy/en/latest/tutorial/
+import os
 from flask import Flask
 
 from database import db_session
@@ -44,7 +45,10 @@ def shutdown_session(exception=None):
 
 if __name__ == '__main__':
     #init_db()
-    app.run()
+
+    # Bind to PORT if defined, otherwise default to 5000.
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
 
 '''
 import argparse
