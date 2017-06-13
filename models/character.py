@@ -1,5 +1,6 @@
 # coding: utf-8
 
+'''
 from sqlalchemy import Column, Integer, String, ForeignKey, Float
 
 from models.models import db, BaseModel
@@ -92,5 +93,4 @@ class Character(BaseModel, db.Model):
     head_protection = Column(String)
     hand_protection = Column(String)
     inventory = Column(String)
-
-
+'''

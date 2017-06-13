@@ -2,6 +2,51 @@
 # All of this code came from here
 # https://www.theodo.fr/blog/2017/03/developping-a-flask-web-app-with-a-postresql-database-making-all-the-possible-errors/
 
+#!/usr/bin/env python
+
+# This code came from here ; http://docs.graphene-python.org/projects/sqlalchemy/en/latest/tutorial/
+from flask import Flask
+
+from database import db_session
+from flask_graphql import GraphQLView
+from models.schema import schema
+
+app = Flask(__name__)
+app.debug = True
+
+default_query = '''
+{
+  allEmployees {
+    edges {
+      node {
+        id,
+        name,
+        department {
+          id,
+          name
+        },
+        role {
+          id,
+          name
+        }
+      }
+    }
+  }
+}'''.strip()
+
+
+app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
+
+if __name__ == '__main__':
+    #init_db()
+    app.run()
+
+'''
 import argparse
 import os
 
@@ -60,3 +105,4 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+'''
