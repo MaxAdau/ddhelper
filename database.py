@@ -3,8 +3,9 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
+from flask_sqlalchemy import SQLAlchemy
 
-
+# TODO move it to config.py
 POSTGRES = {
     'user': 'nndtlkswctupow',
     'pw': os.environ['DDH_DATABASE_PASSWD'],
@@ -53,3 +54,9 @@ Base.query = db_session.query_property()
 
 # Setup Flask app to reach postgresql base
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://DB_USER:PASSWORD@HOST/DATABASE'
+
+
+
+# Initialize a database object
+# Could be moved to a model.py file
+db = SQLAlchemy()

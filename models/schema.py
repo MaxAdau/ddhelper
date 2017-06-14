@@ -14,13 +14,11 @@ class Race(SQLAlchemyObjectType):
 
 
 class Character(SQLAlchemyObjectType):
-
     class Meta:
         model = CharacterModel
         interfaces = (relay.Node, )
 
 class Class(SQLAlchemyObjectType):
-
     class Meta:
         model = ClassModel
         interfaces = (relay.Node, )

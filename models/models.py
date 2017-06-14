@@ -12,6 +12,9 @@ class Department(Base):
     name = sqlalchemy.Column(sqlalchemy.String)
 '''
 
+
+
+# TODO add all fields of this class, matching postgresql
 class Race(Base):
     """Model for the race table"""
     __tablename__ = 'races'
@@ -37,6 +40,8 @@ class Class(Base):
     description = sqlalchemy.Column(sqlalchemy.String)
 
 
+
+
 class Character(Base):
     __tablename__ = 'chars'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
@@ -44,12 +49,12 @@ class Character(Base):
     # Use default=func.now() to set the default hiring time
     # of a Character to be the current time when an
     # Character record was created
-    hired_on = sqlalchemy.Column(sqlalchemy.DateTime, default=sqlalchemy.func.now())
+
 
     race_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('races.id'))
-    class_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('classes.id'))
+    klass_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('classes.id'))
     race = relationship(Race)
-    class_ = relationship(Class)
+    klass_ = relationship(Class)
 
 '''
 import datetime
