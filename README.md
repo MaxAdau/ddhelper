@@ -24,9 +24,11 @@ $ source <path/to/new/virtualenv/>/bin/activate
 ```
 Install dependencies
 ```
-$ pip install -r requirements
+$ pip3 install -r requirements.txt
 ```
 Run the application
 ```
 $ python app.py
 ```
+Open the app: http://localhost:5000
+Open the graphiQL: http://localhost:5000/graphql
