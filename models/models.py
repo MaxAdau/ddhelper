@@ -5,41 +5,51 @@ from sqlalchemy.orm import backref, relationship
 
 from database import Base
 
-
+'''
 class Department(Base):
     __tablename__ = 'department'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
     name = sqlalchemy.Column(sqlalchemy.String)
+'''
 
+class Race(Base):
+    """Model for the race table"""
+    __tablename__ = 'races'
 
-class Role(Base):
-    __tablename__ = 'roles'
-    role_id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    # incremental ID
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+
+    # About the race
     name = sqlalchemy.Column(sqlalchemy.String)
+    description = sqlalchemy.Column(sqlalchemy.String)
+
+    # TODO move it to an ENUM type
+    size = sqlalchemy.Column(sqlalchemy.String)
+
+    def __repr__(self):
+        return self.name
 
 
-class Employee(Base):
-    __tablename__ = 'employee'
+class Class(Base):
+    __tablename__ = 'classes'
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    name = sqlalchemy.Column(sqlalchemy.String)
+    description = sqlalchemy.Column(sqlalchemy.String)
+
+
+class Character(Base):
+    __tablename__ = 'chars'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
     name = sqlalchemy.Column(sqlalchemy.String)
     # Use default=func.now() to set the default hiring time
-    # of an Employee to be the current time when an
-    # Employee record was created
+    # of a Character to be the current time when an
+    # Character record was created
     hired_on = sqlalchemy.Column(sqlalchemy.DateTime, default=sqlalchemy.func.now())
-    department_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('department.id'))
-    role_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('roles.role_id'))
-    # Use cascade='delete,all' to propagate the deletion of a Department onto its Employees
-    department = relationship(
-        Department,
-        backref=backref('employees',
-                        uselist=True,
-                        cascade='delete,all'))
-    role = relationship(
-        Role,
-        backref=backref('roles',
-                        uselist=True,
-                        cascade='delete,all'))
 
+    race_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('races.id'))
+    class_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('classes.id'))
+    race = relationship(Race)
+    class_ = relationship(Class)
 
 '''
 import datetime
