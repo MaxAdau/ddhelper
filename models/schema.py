@@ -7,7 +7,6 @@ from models.models import Class as ClassModel
 
 
 class Race(SQLAlchemyObjectType):
-
     class Meta:
         model = RaceModel
         interfaces = (relay.Node, )

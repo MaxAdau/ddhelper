@@ -28,11 +28,11 @@ admin = Admin(app, name='Dungeons and Dragons', template_mode='bootstrap3')
 admin.add_view(ModelView(Character, db.session))
 admin.add_view(ModelView(Race, db.session))
 admin.add_view(ModelView(Class, db.session))
-#admin.add_view(ModelView(Weapon, db.session))
-#admin.add_view(ModelView(Armor, db.session))
-#admin.add_view(ModelView(Event, db.session))
-#admin.add_view(ModelView(Encounter, db.session))
-#admin.add_view(ModelView(Adventure, db.session))
+admin.add_view(ModelView(Weapon, db.session))
+admin.add_view(ModelView(Armor, db.session))
+admin.add_view(ModelView(Event, db.session))
+admin.add_view(ModelView(Encounter, db.session))
+admin.add_view(ModelView(Adventure, db.session))
 
 # Define postgresql config
 if 'DDH_DATABASE_PASSWD' not in os.environ:
