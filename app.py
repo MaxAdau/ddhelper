@@ -15,6 +15,7 @@ from flask_admin.contrib.sqla import ModelView
 
 from models.schema import schema
 from models.models import *
+from models.events_models import *
 from database import db, POSTGRES
 
 app = Flask(__name__)
@@ -27,7 +28,7 @@ admin = Admin(app, name='Dungeons and Dragons', template_mode='bootstrap3')
 # Add views of flask admin UI
 admin.add_view(ModelView(Character, db.session))
 admin.add_view(ModelView(Race, db.session))
-admin.add_view(ModelView(Class, db.session))
+admin.add_view(ModelView(Klass, db.session))
 admin.add_view(ModelView(Weapon, db.session))
 admin.add_view(ModelView(Armor, db.session))
 admin.add_view(ModelView(Event, db.session))

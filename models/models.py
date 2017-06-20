@@ -33,8 +33,8 @@ class Race(Base):
         return self.name
 
 
-class Class(Base):
-    __tablename__ = 'classes'
+class Klass(Base):
+    __tablename__ = 'klasses'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
     name = sqlalchemy.Column(sqlalchemy.String)
     description = sqlalchemy.Column(sqlalchemy.String)
@@ -50,9 +50,9 @@ class Character(Base):
     name = sqlalchemy.Column(sqlalchemy.String)
 
     race_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('races.id'))
-    klass_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('classes.id'))
+    klass_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('klasses.id'))
     race = relationship(Race)
-    klass_ = relationship(Class)
+    klass_ = relationship(Klass)
 
 class Weapon(Base):
     """Model for the weapon table"""
@@ -110,25 +110,6 @@ class Armor(Base):
         return self.name
 
 
-class Event(Base):
-    """Model for the armor table"""
-    __tablename__ = 'events'
-
-    # incremental ID
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
-
-    # About the event
-    name = sqlalchemy.Column(sqlalchemy.String)
-    adventure_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("adventures.id"))
-    adventure = relationship("Adventure")
-
-    # what did happen here ?
-    description = sqlalchemy.Column(sqlalchemy.String)
-
-    def __repr__(self):
-        return self.name
-
-
 class Encounter(Base):
     """Model for the armor table"""
     __tablename__ = 'encounters'
@@ -144,9 +125,14 @@ class Encounter(Base):
     description = sqlalchemy.Column(sqlalchemy.String)
 
     # Who did fight ?
-    players = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of character IDs where character.type == PC
-    allies = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of character IDs
-    opponents = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of character IDs
+    players = sqlalchemy.Column(sqlalchemy.String)
+    # TODO this should be a list of character IDs where character.type == PC
+
+    allies = sqlalchemy.Column(sqlalchemy.String)
+    # TODO this should be a list of character IDs
+
+    opponents = sqlalchemy.Column(sqlalchemy.String)
+    # TODO this should be a list of character IDs
 
     def __repr__(self):
         return self.name
@@ -165,8 +151,6 @@ class Adventure(Base):
     # History of this adventure
     events = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of events.id
     encounters = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of encounter.id
-    #race_id = sqlalchemy.Column(Integer, sqlalchemy.ForeignKey("races.id"))
-    #race = relationship("Race")
 
     players = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of players.id
 

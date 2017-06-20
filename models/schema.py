@@ -3,7 +3,7 @@ from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from models.models import Race as RaceModel
 from models.models import Character as CharacterModel
-from models.models import Class as ClassModel
+from models.models import Klass as ClassModel
 
 
 class Race(SQLAlchemyObjectType):
@@ -29,7 +29,6 @@ class Query(graphene.ObjectType):
     all_races = SQLAlchemyConnectionField(Race)
 
     class_ = graphene.Field(Class)
-
 
 
 '''
