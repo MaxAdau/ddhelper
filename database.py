@@ -15,7 +15,7 @@ POSTGRES = {
 }
 
 db_url = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-print(db_url)
+# DEBUG print(db_url)
 engine = create_engine(db_url,
                         convert_unicode=True)
 

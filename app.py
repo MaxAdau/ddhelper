@@ -38,25 +38,35 @@ app.config['DEBUG'] = True
 db.init_app(app)
 
 # Set up GraphQLView
+
+# Should this realy be here ?
 default_query = '''
-{
-  allEmployees {
+  allEvents {
     edges {
-      node {
-        id,
-        name,
-        department {
+          node {
           id,
           name
-        },
-        role {
-          id,
-          name
-        }
-      }
     }
-  }
-}'''.strip()
+'''
+# default_query = '''
+# {
+#   allEmployees {
+#     edges {
+#       node {
+#         id,
+#         name,
+#         department {
+#           id,
+#           name
+#         },
+#         role {
+#           id,
+#           name
+#         }
+#       }
+#     }
+#   }
+# }'''.strip()
 
 
 app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))

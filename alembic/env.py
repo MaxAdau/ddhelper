@@ -3,6 +3,9 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
+import sys
+import os
+sys.path.append(os.getcwd())
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -11,14 +14,20 @@ config = context.config
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 
+from database import db_url
+config.set_main_option("sqlalchemy.url", db_url)
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
 
-import os, inspect, sys
+# In order to delete the url hardcoded entry of my alembic.ini, I should try to implement that :
+# https://github.com/davidism/basic_flask/blob/master/alembic/env.py
 
+
+# Fucking Ugly ...
+import os, inspect, sys
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
