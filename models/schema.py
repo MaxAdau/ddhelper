@@ -1,34 +1,34 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
-from models.models import Event as RaceModel
-from models.models import EventActor as CharacterModel
-from models.models import Actor as ClassModel
+from models.models import Event as EventModel
+from models.models import EventActor as EventActorModel
+from models.models import Actor as ActorModel
 
 
-class Race(SQLAlchemyObjectType):
+class Event(SQLAlchemyObjectType):
     class Meta:
-        model = RaceModel
+        model = EventModel
         interfaces = (relay.Node, )
 
 
-class Character(SQLAlchemyObjectType):
+class EventActor(SQLAlchemyObjectType):
     class Meta:
-        model = CharacterModel
+        model = EventActorModel
         interfaces = (relay.Node, )
 
-class Class(SQLAlchemyObjectType):
+class Actor(SQLAlchemyObjectType):
     class Meta:
-        model = ClassModel
+        model = ActorModel
         interfaces = (relay.Node, )
 
 class Query(graphene.ObjectType):
     node = relay.Node.Field()
-    all_characters = SQLAlchemyConnectionField(Character)
-    all_classes = SQLAlchemyConnectionField(Class)
-    all_races = SQLAlchemyConnectionField(Race)
+    all_th = SQLAlchemyConnectionField(EventActor)
+    all_classes = SQLAlchemyConnectionField(Actor)
+    all_events = SQLAlchemyConnectionField(Event)
 
-    class_ = graphene.Field(Class)
+    class_ = graphene.Field(Actor)
 
 
 '''
@@ -60,4 +60,4 @@ class Query(graphene.ObjectType):
     role = graphene.Field(Role)
 '''
 
-schema = graphene.Schema(query=Query, types=[Race, Character, Class])
+schema = graphene.Schema(query=Query, types=[Event, EventActor, Actor])

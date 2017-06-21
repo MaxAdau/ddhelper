@@ -7,7 +7,6 @@ from database import Base
 
 
 class Event(Base):
-    # TODO NOW : I want colin to be able to graphql those events
     """Model for the armor table"""
     __tablename__ = 'events'
 
