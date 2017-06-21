@@ -1,33 +1,92 @@
 # coding: utf-8
 
-import sqlalchemy
+import sqlalchemy as sa
 from sqlalchemy.orm import backref, relationship
 
 from database import Base
 
+
+class Event(Base):
+    # TODO NOW : I want colin to be able to graphql those events
+    """Model for the armor table"""
+    __tablename__ = 'events'
+
+    # incremental ID
+    id = sa.Column(sa.Integer, primary_key=True)
+
+    # About the event
+    name = sa.Column(sa.String)
+
+    # What did happen here ?
+    description = sa.Column(sa.String)
+
+    # TODO ADD DATE
+    def __repr__(self):
+        return self.name
+
+
+class EventActor(Base):
+    """Relation between events and actors"""
+    __tablename__ = 'event_actors'
+
+    # incremental ID
+    id = sa.Column(sa.Integer, primary_key=True)
+
+    # actor relation
+    actor_id = sa.Column(sa.Integer, sa.ForeignKey("actors.id"))
+    actor = relationship("Actor")
+
+    # event relation
+    event_id = sa.Column(sa.Integer, sa.ForeignKey("events.id"))
+    event = relationship("Event")
+
+    def __repr__(self):
+        return self.id
+
+
+class Actor(Base):
+    __tablename__ = 'actors'
+
+    # incremental ID
+    id = sa.Column(sa.Integer, primary_key=True)
+
+    # Later, this will be a user
+    name = sa.Column(sa.String)
+
+    def __repr__(self):
+        return self.name
+
+
+
+
 '''
-class Department(Base):
-    __tablename__ = 'department'
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
-    name = sqlalchemy.Column(sqlalchemy.String)
+class EventActor(Base):
+    """Model representing actors of an event"""
+    __tablename__ = 'eventactors'
+
+    # Incremental ID
+    id = sa.Column(sa.Integer, primary_key=True)
+
+    event_id = sa.Column(sa.Integer, sa.ForeignKey("events.id"))
+    adventure = relationship("Event")
 '''
 
 
-
+'''
 # TODO add all fields of this class, matching postgresql
 class Race(Base):
     """Model for the race table"""
     __tablename__ = 'races'
 
     # incremental ID
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    id = sa.Column(sa.Integer, primary_key=True)
 
     # About the race
-    name = sqlalchemy.Column(sqlalchemy.String)
-    description = sqlalchemy.Column(sqlalchemy.String)
+    name = sa.Column(sa.String)
+    description = sa.Column(sa.String)
 
     # TODO move it to an ENUM type
-    size = sqlalchemy.Column(sqlalchemy.String)
+    size = sa.Column(sa.String)
 
     def __repr__(self):
         return self.name
@@ -35,10 +94,10 @@ class Race(Base):
 
 class Klass(Base):
     __tablename__ = 'klasses'
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
-    name = sqlalchemy.Column(sqlalchemy.String)
-    description = sqlalchemy.Column(sqlalchemy.String)
-    hp = sqlalchemy.Column(sqlalchemy.Integer)
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.String)
+    description = sa.Column(sa.String)
+    hp = sa.Column(sa.Integer)
 
     def __repr__(self):
         return self.name
@@ -46,11 +105,11 @@ class Klass(Base):
 
 class Character(Base):
     __tablename__ = 'chars'
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
-    name = sqlalchemy.Column(sqlalchemy.String)
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.String)
 
-    race_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('races.id'))
-    klass_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('klasses.id'))
+    race_id = sa.Column(sa.Integer, sa.ForeignKey('races.id'))
+    klass_id = sa.Column(sa.Integer, sa.ForeignKey('klasses.id'))
     race = relationship(Race)
     klass_ = relationship(Klass)
 
@@ -59,22 +118,22 @@ class Weapon(Base):
     __tablename__ = 'weapons'
 
     # incremental ID
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    id = sa.Column(sa.Integer, primary_key=True)
 
     # About the weapon
-    name = sqlalchemy.Column(sqlalchemy.String)
-    description = sqlalchemy.Column(sqlalchemy.String)
+    name = sa.Column(sa.String)
+    description = sa.Column(sa.String)
 
     # Damage
-    dmg_S = sqlalchemy.Column(sqlalchemy.String)
-    dmg_M = sqlalchemy.Column(sqlalchemy.String)
-    critical = sqlalchemy.Column(sqlalchemy.String)
-    range_increment = sqlalchemy.Column(sqlalchemy.Integer) # in meter
+    dmg_S = sa.Column(sa.String)
+    dmg_M = sa.Column(sa.String)
+    critical = sa.Column(sa.String)
+    range_increment = sa.Column(sa.Integer) # in meter
 
     # Other
-    weight = sqlalchemy.Column(sqlalchemy.Float) # in Kilo
-    dmg_type = sqlalchemy.Column(sqlalchemy.String)
-    cost = sqlalchemy.Column(sqlalchemy.String) # in GP
+    weight = sa.Column(sa.Float) # in Kilo
+    dmg_type = sa.Column(sa.String)
+    cost = sa.Column(sa.String) # in GP
 
     def __repr__(self):
         return self.name
@@ -84,27 +143,27 @@ class Armor(Base):
     __tablename__ = 'armors'
 
     # incremental ID
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    id = sa.Column(sa.Integer, primary_key=True)
 
     # Is this armor a shield ?
-    is_shield = sqlalchemy.Column(sqlalchemy.Boolean)
+    is_shield = sa.Column(sa.Boolean)
 
     # About the armor
-    name = sqlalchemy.Column(sqlalchemy.String)
-    description = sqlalchemy.Column(sqlalchemy.String)
+    name = sa.Column(sa.String)
+    description = sa.Column(sa.String)
 
     # Damage
-    ca_bonus = sqlalchemy.Column(sqlalchemy.Integer)
-    max_dex = sqlalchemy.Column(sqlalchemy.Integer)
-    armor_penalty_check = sqlalchemy.Column(sqlalchemy.Integer)
-    arcane_spell_fail = sqlalchemy.Column(sqlalchemy.Integer)
-    speed_6m = sqlalchemy.Column(sqlalchemy.Integer)
-    speed_9m = sqlalchemy.Column(sqlalchemy.Integer)
+    ca_bonus = sa.Column(sa.Integer)
+    max_dex = sa.Column(sa.Integer)
+    armor_penalty_check = sa.Column(sa.Integer)
+    arcane_spell_fail = sa.Column(sa.Integer)
+    speed_6m = sa.Column(sa.Integer)
+    speed_9m = sa.Column(sa.Integer)
 
     # Other
-    weight = sqlalchemy.Column(sqlalchemy.Float)  # in Kilo
-    dmg_type = sqlalchemy.Column(sqlalchemy.String)
-    cost = sqlalchemy.Column(sqlalchemy.String)  # in GP
+    weight = sa.Column(sa.Float)  # in Kilo
+    dmg_type = sa.Column(sa.String)
+    cost = sa.Column(sa.String)  # in GP
 
     def __repr__(self):
         return self.name
@@ -115,23 +174,23 @@ class Encounter(Base):
     __tablename__ = 'encounters'
 
     # incremental ID
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    id = sa.Column(sa.Integer, primary_key=True)
 
-    adventure_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("adventures.id"))
+    adventure_id = sa.Column(sa.Integer, sa.ForeignKey("adventures.id"))
     adventure = relationship("Adventure")
 
     # About the event
-    name = sqlalchemy.Column(sqlalchemy.String)
-    description = sqlalchemy.Column(sqlalchemy.String)
+    name = sa.Column(sa.String)
+    description = sa.Column(sa.String)
 
     # Who did fight ?
-    players = sqlalchemy.Column(sqlalchemy.String)
+    players = sa.Column(sa.String)
     # TODO this should be a list of character IDs where character.type == PC
 
-    allies = sqlalchemy.Column(sqlalchemy.String)
+    allies = sa.Column(sa.String)
     # TODO this should be a list of character IDs
 
-    opponents = sqlalchemy.Column(sqlalchemy.String)
+    opponents = sa.Column(sa.String)
     # TODO this should be a list of character IDs
 
     def __repr__(self):
@@ -143,16 +202,17 @@ class Adventure(Base):
     __tablename__ = 'adventures'
 
     # incremental ID
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
+    id = sa.Column(sa.Integer, primary_key=True)
 
-    name = sqlalchemy.Column(sqlalchemy.String)
-    description = sqlalchemy.Column(sqlalchemy.String)
+    name = sa.Column(sa.String)
+    description = sa.Column(sa.String)
 
     # History of this adventure
-    events = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of events.id
-    encounters = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of encounter.id
+    events = sa.Column(sa.String)  # TODO this should be a list of events.id
+    encounters = sa.Column(sa.String)  # TODO this should be a list of encounter.id
 
-    players = sqlalchemy.Column(sqlalchemy.String)  # TODO this should be a list of players.id
+    players = sa.Column(sa.String)  # TODO this should be a list of players.id
 
     def __repr__(self):
         return self.name
+'''

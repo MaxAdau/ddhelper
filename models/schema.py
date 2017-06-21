@@ -1,9 +1,9 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
-from models.models import Race as RaceModel
-from models.models import Character as CharacterModel
-from models.models import Klass as ClassModel
+from models.models import Event as RaceModel
+from models.models import EventActor as CharacterModel
+from models.models import Actor as ClassModel
 
 
 class Race(SQLAlchemyObjectType):

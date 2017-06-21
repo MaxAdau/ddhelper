@@ -7,14 +7,16 @@ from flask_sqlalchemy import SQLAlchemy
 
 # TODO move it to config.py
 POSTGRES = {
-    'user': 'nndtlkswctupow',
+    'user': 'zqhpnstbycewhx',
     'pw': os.environ['DDH_DATABASE_PASSWD'],
-    'db': 'dalp11jeof21vd',
-    'host': 'ec2-54-75-231-195.eu-west-1.compute.amazonaws.com',
+    'db': 'd4lohv9deu7e4b',
+    'host': 'ec2-54-246-108-119.eu-west-1.compute.amazonaws.com',
     'port': '5432'
 }
 
-engine = create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES,
+db_url = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+print(db_url)
+engine = create_engine(db_url,
                         convert_unicode=True)
 
 #engine = create_engine('sqlite:///database.sqlite3', convert_unicode=True)
