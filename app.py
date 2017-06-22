@@ -43,14 +43,15 @@ db.init_app(app)
 # Set up GraphQLView
 
 # Should this realy be here ?
-default_query = '''
-  allEvents {
-    edges {
-          node {
-          id,
-          name
-    }
-'''
+# default_query = '''
+#   query {
+#     event {
+#       node {
+#         id,
+#         name,
+#         description
+#     }
+# '''
 # default_query = '''
 # {
 #   allEmployees {
