@@ -31,8 +31,6 @@ if 'DDH_DATABASE_PASSWD' not in os.environ:
     exit('Unable to find DDH_DATABASE_PASSWD env variable : exiting')
 
 # Setup Flask app to reach postgresql base
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://DB_USER:PASSWORD@HOST/DATABASE'
-
 # TODO should use a config file ... at least database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 app.config['DEBUG'] = True

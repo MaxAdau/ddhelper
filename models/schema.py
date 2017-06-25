@@ -10,6 +10,7 @@ from models.models import Actor as ActorModel
 
 from database import db_session
 
+
 class Event(SQLAlchemyObjectType):
     """Represents the schema of Event Model"""
     class Meta:
@@ -22,8 +23,8 @@ class Event(SQLAlchemyObjectType):
 #     class Meta:
 #         model = EventActorModel
 #         interfaces = (relay.Node, )
-#
-#
+
+
 class Actor(SQLAlchemyObjectType):
     """Represents the schema of Actor Model"""
     class Meta:
@@ -33,12 +34,13 @@ class Actor(SQLAlchemyObjectType):
 
 class Query(graphene.ObjectType):
     """Todo : need to check the capabilities of this one"""
-#    node = relay.Node.Field()
+    # node = relay.Node.Field()
 
-    #all_actors = SQLAlchemyConnectionField(Actor)
-    #all_events = SQLAlchemyConnectionField(Event)
+    # What do that do ?
+    # all_actors = SQLAlchemyConnectionField(Actor)
+    # all_events = SQLAlchemyConnectionField(Event)
 
-#    actor_ = graphene.Field(Actor)
+    # actor_ = graphene.Field(Actor)
 
     event = graphene.Field(Event)
     events = graphene.List(Event)
@@ -46,18 +48,21 @@ class Query(graphene.ObjectType):
     actor = graphene.Field(Actor)
     actors = graphene.List(Actor)
 
+    @staticmethod
     def resolve_event(self, *args, **kwargs):
         return db_session.query(EventModel).first()
 
+    @staticmethod
     def resolve_events(self, *args, **kwargs):
         return db_session.query(EventModel).all()
 
+    @staticmethod
     def resolve_actor(self, *args, **kwargs):
         return db_session.query(ActorModel).first()
 
+    @staticmethod
     def resolve_actors(self, *args, **kwargs):
         return db_session.query(ActorModel).all()
 
 # Building my schema object
-#schema = graphene.Schema(query=Query, types=[Event, EventActor, Actor])
 schema = graphene.Schema(query=Query, types=[Event, Actor])
