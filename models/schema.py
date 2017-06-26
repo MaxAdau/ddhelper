@@ -10,31 +10,26 @@ from models.models import Actor as ActorModel
 
 from database import db_session
 
-
-class EventActor(SQLAlchemyObjectType):
-    """Represents the schema of EventActor Model"""
-    class Meta:
-        model = EventActorModel
-        interfaces = (relay.Node, )
-
-
-class Event(SQLAlchemyObjectType):
-    """Represents the schema of Event Model"""
-    class Meta:
-        model = EventModel
-        interfaces = (relay.Node, )
-
-    def get_node(self, *args, **kwargs):
-        return db_session.query(EventModel).first()
-
 class Actor(SQLAlchemyObjectType):
     """Represents the schema of Actor Model"""
     class Meta:
         model = ActorModel
         interfaces = (relay.Node, )
 
-    def get_node(self, args, context, info):
-        return '{} {}'. format(context, info)
+class Event(SQLAlchemyObjectType):
+    """
+    Represents the schema of Event Model
+    WHen done with it, I should handle the actors a proper way
+    """
+    class Meta:
+        model = EventModel
+        interfaces = (relay.Node, )
+
+    event_actors = graphene.List(Actor)
+
+    def resolve_event_actors(self, args, context, info):
+        return db_session.query(ActorModel).join(EventActorModel)
+
 
 class Query(graphene.ObjectType):
     """Todo : need to check the capabilities of this one"""
@@ -46,21 +41,25 @@ class Query(graphene.ObjectType):
     # which links to ANY type in the Schema which implements Node.
     node = relay.Node.Field()
 
-    event = graphene.Field(Event, id=graphene.ID())
+    # Why do I think that it is stupid to do so ?
+#    event = graphene.Field(Event, id=graphene.ID())
+    event = graphene.Field(Event)
 
     ##### For now, this do not work
     def resolve_event(self, args, context, info):
-        query = Event.get_query(context)
-        id = args.get('id')
-        return query.get(id)
+        # query = Event.get_query(context)
+        # id = args.get('id')
+        #
+        # return query.get(id)
+        return db_session.query(EventModel)
 
-    actor = graphene.Field(Actor, id=graphene.ID())
+    # actor = graphene.Field(Actor, id=graphene.ID())
 
     ##### For now, this do not work
-    def resolve_actor(self, args, context, info):
-        query = Actor.get_query(context)
-        id = args.get('id')
-        return query.get(id)
+    # def resolve_actor(self, args, context, info):
+    #     query = Actor.get_query(context)
+    #     id = args.get('id')
+    #     return query.get(id)
 
     # event = relay.Node.Field(Event)
     # event = graphene.Field(Event)
@@ -76,11 +75,11 @@ class Query(graphene.ObjectType):
         return db_session.query(EventModel)
         # Use http://docs.sqlalchemy.org/en/latest/orm/query.html
 
-    all_actors = graphene.List(Actor)
-    @staticmethod
-    def resolve_all_actors(self, args, context, info):
-        return db_session.query(ActorModel)
-        # Use http://docs.sqlalchemy.org/en/latest/orm/query.html
+    # all_actors = graphene.List(Actor)
+    # @staticmethod
+    # def resolve_all_actors(self, args, context, info):
+    #     return db_session.query(ActorModel)
+    #     # Use http://docs.sqlalchemy.org/en/latest/orm/query.html
 
 
 
