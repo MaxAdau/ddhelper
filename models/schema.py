@@ -29,6 +29,7 @@ class Event(SQLAlchemyObjectType):
 
     def resolve_present_actors(self, args, context, info):
         '''List all actors that take part of an event'''
+        print('Context : {}\n Info : {}'.format(context, info))
         # SQL request to handle this :
         # select events.name, events.description, actors.name from actors
         # left join event_actors on actors.id = event_actors.actor_id
