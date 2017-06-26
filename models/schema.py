@@ -18,17 +18,46 @@ class Actor(SQLAlchemyObjectType):
 
 class Event(SQLAlchemyObjectType):
     """
-    Represents the schema of Event Model
-    WHen done with it, I should handle the actors a proper way
-    """
+                Represents the schema of Event Model
+                WHen done with it, I should handle the actors a proper way
+                """
     class Meta:
         model = EventModel
         interfaces = (relay.Node, )
 
-    event_actors = graphene.List(Actor)
+    present_actors = graphene.List(Actor)
 
-    def resolve_event_actors(self, args, context, info):
-        return db_session.query(ActorModel).join(EventActorModel)
+    def resolve_present_actors(self, args, context, info):
+        '''List all actors that take part of an event'''
+        # SQL request to handle this :
+        # select events.name, events.description, actors.name from actors
+        # left join event_actors on actors.id = event_actors.actor_id
+        # left join events on events.id = event_actors.event_id where events.id = 3;
+
+        # This return all actors
+        # return db_session.query(ActorModel).\
+        #     join(EventActorModel, ActorModel.id == EventActorModel.actor_id).\
+        #     join(EventModel, EventModel.id == EventActorModel.event_id)
+
+
+        # return db_session.query(ActorModel).join(EventActorModel)
+
+
+        # This return all actors
+        # return db_session.query(ActorModel).\
+        #     join(EventActorModel, ActorModel.id == EventActorModel.actor_id).\
+        #     join(EventModel, EventModel.id == EventActorModel.event_id)
+
+
+        # # This return all actors
+        # return db_session.query(ActorModel).\
+        #     join(EventActorModel, ActorModel.id == EventActorModel.actor_id).\
+        #     join(EventModel, EventModel.id == EventActorModel.event_id)
+
+
+        # first, I need to get this event id
+        # Then I can use db_session to join what I want, using
+        # http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.join
 
 
 class Query(graphene.ObjectType):
