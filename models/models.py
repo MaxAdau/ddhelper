@@ -41,7 +41,11 @@ class Event(Base):
     location_id = sa.Column(sa.Integer, sa.ForeignKey("locations.id"))
     location = relationship("Location", back_populates="event")
 
-    # TODO ADD DATE
+    # Use default=func.now() to set the default hiring time
+    # of an Event to be the current time when an
+    # Event is create
+    date = sa.Column(sa.DateTime, default=sa.func.now())
+    
     def __repr__(self):
         return self.name
 
