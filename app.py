@@ -71,7 +71,20 @@ db.init_app(app)
 # }'''.strip()
 
 
-app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+app.add_url_rule(
+    '/graphql',
+    view_func=GraphQLView.as_view(
+        'graphql',
+        schema=schema,
+        graphiql=True,
+
+        # This is needed to be able to get a context in schema.Query typt
+        # ex : SCEHEMA.get_query(context)
+        # Otherwise, I got the error : Request has no attribute get
+        # https://github.com/graphql-python/graphene-sqlalchemy/issues/30
+        context={'session': db_session}
+        ),
+    )
 
 
 @app.teardown_appcontext
