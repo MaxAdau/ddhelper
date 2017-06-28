@@ -8,8 +8,16 @@ from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from models.models import Event as EventModel
 from models.models import EventActor as EventActorModel
 from models.models import Actor as ActorModel
+from models.models import Location as LocationModel
 
 from database import db_session
+
+
+class Location(SQLAlchemyObjectType):
+    """A location, where things happens"""
+    class Meta:
+        model = LocationModel
+        interfaces = (relay.Node, )
 
 
 class Actor(SQLAlchemyObjectType):
@@ -28,6 +36,7 @@ class Event(SQLAlchemyObjectType):
         interfaces = (relay.Node, )
 
     present_actors = graphene.List(Actor)
+    location = graphene.Field(Location)
 
     def resolve_present_actors(self, args, context, info):
         """All actors that were present in an event"""
@@ -43,6 +52,10 @@ class Event(SQLAlchemyObjectType):
             join(EventModel, EventModel.id == EventActorModel.event_id).\
             filter(EventModel.id == parent_event_id)
 
+    # def resolve_location(self, args, context, info):
+    #     """Location linked to an event"""
+    #     return db_session(LocationModel).\
+    #         join()
 
 class Query(graphene.ObjectType):
     """Todo : need to check the capabilities of this one"""
@@ -56,10 +69,11 @@ class Query(graphene.ObjectType):
 
     # Schema queries
     event = graphene.Field(Event, id=graphene.String())
-    # all_events = graphene.List(Event)
-    all_events = SQLAlchemyConnectionField(Event)  # TODO : test pagination
+
+    all_events = SQLAlchemyConnectionField(Event)
 
     actor = graphene.Field(Actor)
+    location = graphene.Field(Location)
 
     # Queries resolvers
     @staticmethod
@@ -78,3 +92,19 @@ class Query(graphene.ObjectType):
 
 # Building my schema object
 schema = graphene.Schema(query=Query, types=[Event, Actor])
+
+# TODO : What to do with it ?
+default_query = '''
+ allEvents (first :1){
+    edges {
+      cursor
+      node {
+        id
+        name
+        presentActors {
+          name
+        }
+      }
+    }
+  }
+'''

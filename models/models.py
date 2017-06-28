@@ -6,6 +6,25 @@ from sqlalchemy.orm import backref, relationship
 from database import Base
 
 
+class Location(Base):
+    """Model of the location table"""
+    __tablename__ = 'locations'
+
+    # incremental ID
+    id = sa.Column(sa.Integer, primary_key=True)
+
+    # About the location
+    name = sa.Column(sa.String)
+    description = sa.Column(sa.String)
+
+    # This established a One to Many relationship
+    # http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html#one-to-many
+    event = relationship("Event", back_populates='location')
+
+    def __repr__(self):
+        return self.name
+
+
 class Event(Base):
     """Model for the armor table"""
     __tablename__ = 'events'
@@ -15,9 +34,12 @@ class Event(Base):
 
     # About the event
     name = sa.Column(sa.String)
-
-    # What did happen here ?
     description = sa.Column(sa.String)
+
+    # location relation
+    # TODO : check : Do i need both of those fields ?
+    location_id = sa.Column(sa.Integer, sa.ForeignKey("locations.id"))
+    location = relationship("Location", back_populates="event")
 
     # TODO ADD DATE
     def __repr__(self):
