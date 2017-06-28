@@ -31,7 +31,8 @@ import os, inspect, sys
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
-from models.models import EventActor, Event
+
+from models.models import EventActor, Event, Location
 
 from database import Base
 target_metadata = Base.metadata
