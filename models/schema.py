@@ -5,7 +5,7 @@ from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 
 from models.models import Event as EventModel
-from models.models import EventActor as EventActorModel
+# from models.models import EventActor as EventActorModel
 from models.models import Actor as ActorModel
 
 from database import db_session
@@ -18,9 +18,9 @@ class Actor(SQLAlchemyObjectType):
 
 class Event(SQLAlchemyObjectType):
     """
-                Represents the schema of Event Model
-                WHen done with it, I should handle the actors a proper way
-                """
+    An event located in a place with actors involved in it
+    WHen done with it, I should handle the actors a proper way
+    """
     class Meta:
         model = EventModel
         interfaces = (relay.Node, )
@@ -28,37 +28,27 @@ class Event(SQLAlchemyObjectType):
     present_actors = graphene.List(Actor)
 
     def resolve_present_actors(self, args, context, info):
-        '''List all actors that take part of an event'''
+        """All actors that were present in an event"""
         print('Context : {}\n Info : {}'.format(context, info))
+
+        event_id = args.get('ID')
+        print(event_id)
+        # Use that http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.join
+
         # SQL request to handle this :
         # select events.name, events.description, actors.name from actors
         # left join event_actors on actors.id = event_actors.actor_id
-        # left join events on events.id = event_actors.event_id where events.id = 3;
+        # left join events on events.id = event_actors.event_id where events.id = XX;
 
         # This return all actors
         # return db_session.query(ActorModel).\
         #     join(EventActorModel, ActorModel.id == EventActorModel.actor_id).\
         #     join(EventModel, EventModel.id == EventActorModel.event_id)
 
-
-        # return db_session.query(ActorModel).join(EventActorModel)
-
-
         # This return all actors
         # return db_session.query(ActorModel).\
         #     join(EventActorModel, ActorModel.id == EventActorModel.actor_id).\
         #     join(EventModel, EventModel.id == EventActorModel.event_id)
-
-
-        # # This return all actors
-        # return db_session.query(ActorModel).\
-        #     join(EventActorModel, ActorModel.id == EventActorModel.actor_id).\
-        #     join(EventModel, EventModel.id == EventActorModel.event_id)
-
-
-        # first, I need to get this event id
-        # Then I can use db_session to join what I want, using
-        # http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.join
 
 
 class Query(graphene.ObjectType):
@@ -71,17 +61,31 @@ class Query(graphene.ObjectType):
     # which links to ANY type in the Schema which implements Node.
     node = relay.Node.Field()
 
-    # Why do I think that it is stupid to do so ?
-#    event = graphene.Field(Event, id=graphene.ID())
-    event = graphene.Field(Event)
+    event = graphene.Field(Event, id=graphene.String())
 
     ##### For now, this do not work
     def resolve_event(self, args, context, info):
-        # query = Event.get_query(context)
-        # id = args.get('id')
-        #
+
+        # PROBLEM : This is the "graphene" id, not the postgre one
+        event_id = args.get('id')
+
+        event_query = Event.get_query(context) # SQLAlchemy query
+
+        from graphql_relay.node.node import from_global_id
+
+        print('event_id : {}'.format(event_id))
+
+        local_id = from_global_id(event_id)
+        print('local_id : {}'.format(local_id))
+
+        # Get the original postgresql ID
+        return event_query.get(local_id[1])
+
         # return query.get(id)
-        return db_session.query(EventModel)
+
+        # This do works
+        # return db_session.query(EventModel)
+
 
     # actor = graphene.Field(Actor, id=graphene.ID())
 
