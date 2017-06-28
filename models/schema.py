@@ -57,8 +57,8 @@ class Query(graphene.ObjectType):
 
     # Schema queries
     event = graphene.Field(Event, id=graphene.String())
-    all_events = graphene.List(Event)
-    # all_events = SQLAlchemyConnectionField(Event)  # TODO : test pagination
+    # all_events = graphene.List(Event)
+    all_events = SQLAlchemyConnectionField(Event)  # TODO : test pagination
 
     actor = graphene.Field(Actor)
 
