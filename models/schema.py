@@ -35,7 +35,6 @@ class Event(SQLAlchemyObjectType):
         # This is as easy as that :
         # https://github.com/graphql-python/graphene/issues/378
         parent_event_id = self.id
-        print('event_id : {}'.format(parent_event_id))
 
         # Using that http://docs.sqlalchemy.org/en/latest/orm/query.html#sqlalchemy.orm.query.Query.join
         # Returns all actors linked to an Event, using EventActors table
