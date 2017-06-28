@@ -52,10 +52,6 @@ class Event(SQLAlchemyObjectType):
             join(EventModel, EventModel.id == EventActorModel.event_id).\
             filter(EventModel.id == parent_event_id)
 
-    # def resolve_location(self, args, context, info):
-    #     """Location linked to an event"""
-    #     return db_session(LocationModel).\
-    #         join()
 
 class Query(graphene.ObjectType):
     """Todo : need to check the capabilities of this one"""
@@ -69,10 +65,10 @@ class Query(graphene.ObjectType):
 
     # Schema queries
     event = graphene.Field(Event, id=graphene.String())
-
     all_events = SQLAlchemyConnectionField(Event)
 
     actor = graphene.Field(Actor)
+
     location = graphene.Field(Location)
 
     # Queries resolvers
@@ -85,10 +81,6 @@ class Query(graphene.ObjectType):
         # Get the original postgresql ID
         local_id = from_global_id(event_id)[1]
         return event_query.get(local_id)
-
-    @staticmethod
-    def resolve_all_events(self, *args, **kwargs):
-        return db_session.query(EventModel)
 
 # Building my schema object
 schema = graphene.Schema(query=Query, types=[Event, Actor])
