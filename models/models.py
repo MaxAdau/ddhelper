@@ -37,15 +37,13 @@ class Event(Base):
     description = sa.Column(sa.String)
 
     # location relation
-    # TODO : check : Do i need both of those fields ?
     location_id = sa.Column(sa.Integer, sa.ForeignKey("locations.id"))
     location = relationship("Location", back_populates="event")
 
-    # Use default=func.now() to set the default hiring time
-    # of an Event to be the current time when an
-    # Event is create
+    # Set the default hiring time of an Event
+    # to be the current time when an Event is create
     date = sa.Column(sa.DateTime, default=sa.func.now())
-    
+
     def __repr__(self):
         return self.name
 

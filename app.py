@@ -51,25 +51,29 @@ db.init_app(app)
 #         description
 #     }
 # '''
-# default_query = '''
-# {
-#   allEmployees {
-#     edges {
-#       node {
-#         id,
-#         name,
-#         department {
-#           id,
-#           name
-#         },
-#         role {
-#           id,
-#           name
-#         }
-#       }
-#     }
-#   }
-# }'''.strip()
+
+default_query = '''
+  allEvents (first :1) {
+    edges {
+      cursor
+      node {
+        id
+        name
+        date
+        description
+        location {
+          id
+          name
+          description
+        }
+        presentActors {
+          id
+          name
+        }
+      }
+    }
+  }
+}'''.strip()
 
 
 app.add_url_rule(
@@ -77,6 +81,7 @@ app.add_url_rule(
     view_func=GraphQLView.as_view(
         'graphql',
         schema=schema,
+        default_query=default_query,
         graphiql=True,
 
         # This is needed to be able to get a context in schema.Query typt
